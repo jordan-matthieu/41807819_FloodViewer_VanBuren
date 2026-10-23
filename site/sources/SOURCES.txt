@@ -1,0 +1,9 @@
+Van Buren Bay — November 2020
+Hydrodynamics: user-supplied 2D_IGLD85.dfsu; domain Dunkirk.
+Terrain: user-supplied Lake Erie DEM, read-only source; vertical datum requires independent confirmation.
+
+Buildings: Microsoft Global ML Building Footprints, local snapshot 2026-08-13; CDLA Permissive 2.0. https://github.com/microsoft/GlobalMLBuildingFootprints
+Roads: NYS ITS Geospatial Services. https://gis.ny.gov/streets-addresses
+2021 aerial context: NYS ITS Geospatial Services. https://gis.ny.gov/orthoimagery
+Context vintage varies. These layers do not validate November 2020 flood extents.
+See context_provenance.json for request URLs, source checksums and returned imagery extent.

@@ -1,0 +1,22 @@
+{
+  "siteId": "van_buren_bay",
+  "name": "Van Buren Bay",
+  "frameCount": 193,
+  "buildComplete": true,
+  "readyForDeployment": true,
+  "qaStatus": "All 1306 independent scientific checks, 44 full-sequence browser checks at root/project-prefix URLs, portable exact-case relative-dependency checks and desktop/aerial/mobile visual review passed.",
+  "siteBytes": 323318885,
+  "siteFileCount": 2145,
+  "largestFileBytes": 3568876,
+  "relativeRuntimeLinks": true,
+  "independentDataset": true,
+  "referenceUiSha256": {
+    "index.html": "f1fde2a402db40ff6ae43fbf1f7c423ec8fed961176f828a31caa9f0b1ad6edd",
+    "viewer.js": "f517c4bdb93020cc1a91615256fcadd36955bb325ffa9c19ed32f5e60e56d2e7",
+    "styles.css": "42e9dc32d1df2c74b03a0a6caea0a23fff8338173468b544d219a2d7b6804111",
+    "assets/dhi_logo.svg": "134a809620b4646e219050eef1c172ccb39403e1821db96e3e78ac26f211e66a"
+  },
+  "productionModified": false,
+  "publicationAuthorized": false,
+  "validatedUtc": "2026-10-22T21:07:16.522461+00:00"
+}

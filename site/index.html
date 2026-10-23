@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Explore the November 2020 Lake Erie flood, compare terrain-refined flood extents with the original model, and review each time step.">
+  <link rel="icon" type="image/svg+xml" href="./assets/dhi_logo.svg">
+  <title>Van Buren Bay · November 2020 · 41807819</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="context.js" defer></script>
+  <script src="confidence.js" defer></script>
+  <script src="viewer.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#map">Skip to flood map</a>
+  <header class="masthead">
+    <a class="brand" href="index.html" aria-label="41807819 — Eastern Lake Erie Resiliency Studies"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 13Q8 7 16 13T30 13M2 20Q8 14 16 20T30 20M2 27Q8 21 16 27T30 27"/></svg><span class="brand-project">41807819</span><span class="brand-divider">/</span><span class="brand-study">Eastern Lake Erie Resiliency Studies</span></a>
+    <span class="masthead-meta">VAN BUREN BAY · NOVEMBER 2020</span>
+  </header>
+
+  <main class="workspace">
+    <aside class="sidebar" aria-label="Flood event and display controls">
+      <div class="sidebar-intro"><img class="dhi-logo" src="assets/dhi_logo.svg" alt="DHI"></div>
+
+      <section class="snapshot" aria-label="Selected time step">
+        <div class="section-heading"><span class="eyebrow">TIMESTEP</span><span class="step-tag" id="step-tag">— / —</span></div>
+        <p class="date-display" id="date-display">Loading flood data…</p>
+        <p class="time-display"><span id="time-display">—</span></p>
+        <div class="metrics">
+          <div class="metric"><span class="metric-label">Lake water level</span><div><strong id="water-level">—</strong><span class="metric-unit">m IGLD85</span></div></div>
+          <div class="metric"><span class="metric-label">Refined wet area</span><div><strong id="wet-area">—</strong><span class="metric-unit">ha</span></div></div>
+        </div>
+        <p class="metric-note" id="level-note">Lake water level is a reference value; local water surfaces vary across the map.</p>
+        <p class="water-state-note" id="water-state-note" hidden></p>
+      </section>
+
+      <section class="display-section" aria-label="Map display">
+        <div class="section-heading"><h2>Read the map</h2><span class="tiny-label">DISPLAY</span></div>
+        <label class="basemap-row" id="basemap-row" hidden><span>Base map</span><select id="basemap-select" aria-label="Base map"></select></label>
+        <label class="toggle-row"><span><strong>Building footprints</strong><small>Keep structures visible in the water</small></span><input id="buildings-toggle" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label>
+        <label class="toggle-row flood-buildings-row" id="flood-buildings-row" hidden><span><strong>Highlight flood-touched buildings</strong><small id="flood-buildings-note">Footprint contact, not damage</small></span><input id="flood-buildings-toggle" type="checkbox" aria-describedby="flood-buildings-note"><span class="switch" aria-hidden="true"></span></label>
+        <label class="fill-style-row"><span>Water style</span><select id="fill-style-select" aria-label="Water style"><option value="hybrid">Depth + transparency</option><option value="uniform">Uniform blue</option><option value="transparency">Depth transparency</option><option value="bands">Depth bands</option></select></label>
+        <label class="opacity-row"><span>Overall water opacity <output id="opacity-output" for="opacity-slider">65%</output></span><input id="opacity-slider" type="range" min="15" max="100" value="65" aria-label="Overall water opacity"></label>
+      </section>
+
+      <details class="method-details">
+        <summary><span>About this mapping</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+        <div class="method-content">
+          <p id="method-summary">The IGLD85 model water surface is transferred to the terrain to create a continuous inundation outline. Blue water has a mapped connection to the lake.</p>
+          <p id="buildings-summary">Building stencils are for visual context. They do not change the hydraulic simulation.</p>
+          <p id="reconstruction-summary" hidden>Grey marks disconnected / stranded water (estimated): previously inundated areas with no current mapped connection to the lake. It is estimated from terrain reconstruction, not a modelled pond level.</p>
+          <p id="aerial-note" hidden>Aerial imagery is 2021 context and does not show the November 2020 flood.</p>
+          <p id="context-note" hidden>Area statistics refer to the original map area. The added shoreline provides panning context; flood fill is limited to the modeled domain.</p>
+          <p id="coverage-note" hidden></p>
+          <p id="uncertainty-note">The refined map is a visualization of model and terrain data. Review raw output and quality-control maps before drawing conclusions at individual properties.</p>
+          <p id="confidence-method-summary" hidden></p>
+          <dl class="qc-metrics"><div><dt>Raw wet area</dt><dd id="raw-area">—</dd></div><div><dt>Disconnected area removed</dt><dd id="removed-area">—</dd></div><div><dt>95th percentile transfer distance</dt><dd id="source-distance">—</dd></div></dl>
+          <div id="source-links" class="source-links"></div>
+        </div>
+      </details>
+
+      <div class="export-actions">
+        <a id="frame-link" class="button button-primary" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v10m-4-4 4 4 4-4M3 12v5h14v-5"/></svg>Open print view</a>
+        <div class="secondary-actions"><a id="qc-link" class="text-button" href="#" target="_blank" rel="noopener">View QC map <span aria-hidden="true">↗</span></a><button id="print-button" class="text-button" type="button">Print this view <span aria-hidden="true">↗</span></button></div>
+      </div>
+    </aside>
+
+    <section class="map-workspace" aria-label="Interactive flood atlas">
+      <div class="map-toolbar">
+        <div class="view-tabs" role="group" aria-label="Comparison view">
+          <button type="button" data-mode="refined" class="active" aria-pressed="true">Refined</button>
+          <button type="button" data-mode="raw" aria-pressed="false">Raw model</button>
+          <button type="button" data-mode="split" aria-pressed="false">Compare</button>
+          <button type="button" data-mode="changes" aria-pressed="false">Changes</button>
+          <button type="button" data-mode="confidence" aria-pressed="false">Confidence</button>
+        </div>
+      </div>
+      <section id="confidence-controls" class="confidence-controls" aria-label="Confidence diagnostics" hidden>
+        <label for="confidence-select">Terrain-refined additions</label>
+        <select id="confidence-select" aria-describedby="confidence-description"></select>
+        <p id="confidence-description"></p>
+        <p class="confidence-caveat">Evidence of mapping support, not a probability of flooding. Colours apply only to additions outside the current model wet extent.</p>
+      </section>
+
+      <div class="map-container" id="map-container">
+        <svg id="map" role="img" tabindex="0" aria-labelledby="map-title map-description" xmlns="http://www.w3.org/2000/svg">
+          <title id="map-title">Van Buren Bay flood extent</title>
+          <desc id="map-description">Interactive flood map. Scroll to zoom, drag to pan, and use the timeline below to change time.</desc>
+          <defs><pattern id="unsupported-coverage-pattern" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="12" height="12" fill="#e4dece" fill-opacity="0.12"/><line x1="0" y1="0" x2="0" y2="12" stroke="#9b8d72" stroke-opacity="0.50" stroke-width="2"/></pattern><clipPath id="viewport-clip" clipPathUnits="userSpaceOnUse"><rect id="viewport-clip-rect"/></clipPath><clipPath id="raw-clip" clipPathUnits="userSpaceOnUse"><rect id="raw-clip-rect"/></clipPath><clipPath id="refined-clip" clipPathUnits="userSpaceOnUse"><rect id="refined-clip-rect"/></clipPath><filter id="hybrid-opacity-filter" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncA id="hybrid-opacity-function" type="linear" slope="1"/></feComponentTransfer></filter></defs>
+          <g id="map-content" clip-path="url(#viewport-clip)">
+          <image id="map-background" x="0" y="0" preserveAspectRatio="none"/>
+          <path id="unsupported-coverage-path" fill="url(#unsupported-coverage-pattern)" fill-rule="evenodd" pointer-events="none"/>
+          <g id="context-layer"></g>
+          <g id="raw-layer"><path id="raw-path" fill-rule="evenodd"/><g id="raw-depth-layer"></g><image id="raw-bands-image" x="0" y="0" preserveAspectRatio="none"/><image id="raw-transparency-image" x="0" y="0" preserveAspectRatio="none"/><image id="raw-hybrid-image" x="0" y="0" preserveAspectRatio="none" filter="url(#hybrid-opacity-filter)"/></g>
+          <g id="refined-layer"><path id="refined-path" fill-rule="evenodd"/><g id="depth-layer"></g><image id="transparency-image" x="0" y="0" preserveAspectRatio="none"/><image id="hybrid-image" x="0" y="0" preserveAspectRatio="none" filter="url(#hybrid-opacity-filter)"/><path id="shoreline-path" fill-rule="evenodd" vector-effect="non-scaling-stroke"/></g>
+          <g id="changes-layer"><path id="removed-path" fill-rule="evenodd" vector-effect="non-scaling-stroke"/><path id="added-path" fill-rule="evenodd" vector-effect="non-scaling-stroke"/></g>
+          <image id="confidence-image" x="0" y="0" preserveAspectRatio="none"/>
+          <g id="stranded-layer"><path id="stranded-path" fill-rule="evenodd"/><path id="stranded-outline" fill-rule="evenodd" vector-effect="non-scaling-stroke"/></g>
+          <image id="context-overlay" x="0" y="0" preserveAspectRatio="none"/>
+          <g id="buildings-layer" fill-rule="evenodd"></g>
+          <path id="flood-buildings-path" fill-rule="evenodd" vector-effect="non-scaling-stroke"/>
+          <path id="raw-flood-buildings-path" fill-rule="evenodd" vector-effect="non-scaling-stroke"/>
+          </g>
+        </svg>
+        <div class="north-arrow" aria-label="North"><span>N</span><svg viewBox="0 0 28 44" aria-hidden="true"><path d="m14 3 10 31-10-7-10 7Z"/><path d="M14 3v24"/></svg></div>
+        <div class="split-labels" id="split-labels" hidden><span>RAW MODEL</span><span>TERRAIN-REFINED</span></div>
+        <div class="split-divider" id="split-divider" role="slider" tabindex="0" aria-label="Drag comparison divider; use left and right arrow keys to adjust" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span aria-hidden="true">↔</span></div>
+        <div class="legend" id="depth-legend"><p>WATER DEPTH <span>m</span></p><div class="legend-swatches" id="legend-swatches"></div><div class="legend-labels" id="legend-labels"></div><div class="transparency-caption" id="hybrid-caption" hidden></div></div>
+        <div class="legend transparency-legend" id="transparency-legend" hidden><p><span id="transparency-legend-title">DEPTH-BASED OPACITY</span><span>m</span></p><div class="legend-swatches" id="transparency-swatches"></div><div class="legend-labels" id="transparency-labels"></div><div class="transparency-caption" id="transparency-caption">20% visible at 0 m · 100% at 2 m</div></div>
+        <div class="legend changes-legend" id="changes-legend" hidden><p>SHORELINE REFINEMENT</p><div><i class="added-swatch"></i>Added by terrain refinement</div><div><i class="removed-swatch"></i>Removed from raw extent</div></div>
+        <div class="legend extent-legend" id="extent-legend" hidden><p>WET EXTENT</p><div><i></i><span id="extent-label">Refined inundation</span></div></div>
+        <div class="legend confidence-legend" id="confidence-legend" hidden><p id="confidence-legend-title">MAPPING SUPPORT</p><div id="confidence-legend-items"></div><small id="confidence-frame-note"></small></div>
+        <div id="asset-status" class="asset-status" role="status" aria-live="polite" hidden></div>
+        <div class="map-tools" role="group" aria-label="Map navigation"><button id="zoom-in" type="button" aria-label="Zoom in">+</button><button id="zoom-out" type="button" aria-label="Zoom out">−</button><button id="reset-view" type="button" aria-label="Reset map view" title="Reset map view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 8V3h5M12 3h5v5M17 12v5h-5M8 17H3v-5"/></svg></button></div>
+        <div class="map-scale"><div id="scale-bar"></div><span id="scale-label">250 m</span></div>
+        <span class="pan-hint">DRAG TO PAN · SCROLL TO ZOOM</span>
+        <div class="map-empty" id="map-empty"><strong>Preparing your flood atlas</strong><p>The local data file will load here automatically.</p></div>
+      </div>
+
+      <section class="timeline" aria-label="Event timeline">
+        <div class="timeline-topline"><div><span class="eyebrow">THE EVENT, FRAME BY FRAME</span><span class="timeline-instruction">Move the slider to explore</span></div><button id="peak-button" type="button" class="peak-button">Jump to peak <span aria-hidden="true">↗</span></button></div>
+        <div class="timeline-controls"><button id="play-button" class="play-button" type="button" aria-label="Play animation" aria-pressed="false"><svg id="play-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6Z"/></svg></button><button id="first-button" class="step-button" type="button" aria-label="First time step"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5v10m8-10-5 5 5 5"/></svg></button><button id="previous-button" class="step-button" type="button" aria-label="Previous time step"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 5-5 5 5 5"/></svg></button>
+          <div class="timeline-track"><svg id="hydrograph" viewBox="0 0 1000 40" preserveAspectRatio="none" aria-hidden="true"><path id="hydrograph-area"/><path id="hydrograph-line"/></svg><input type="range" id="time-slider" min="0" max="0" value="0" aria-label="Flood time step"><div class="timeline-dates"><span id="start-label">—</span><span id="end-label">—</span></div></div>
+          <button id="next-button" class="step-button" type="button" aria-label="Next time step"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 5 5 5-5 5"/></svg></button><label class="speed-control"><span class="sr-only">Playback speed</span><select id="speed-select"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select></label>
+        </div>
+        <div class="timeline-footer"><span><i></i>Lake water level through time</span><span>Use <kbd>←</kbd> <kbd>→</kbd> to step · <kbd>Space</kbd> to play</span></div>
+      </section>
+    </section>
+  </main>
+  <div id="live-status" class="sr-only" role="status" aria-live="polite"></div>
+  <p class="print-note" id="print-note">Terrain-refined model visualization. Building footprints are cartographic stencils. Review alongside the original model and QC maps.</p>
+</body>
+</html>

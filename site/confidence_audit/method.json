@@ -1,0 +1,123 @@
+{
+  "siteId": "van_buren_bay",
+  "baselineAvailable": false,
+  "metrics": [
+    {
+      "id": "evidence",
+      "label": "Combined mapping evidence",
+      "description": "Combines source and modelled-boundary distances with native wet support during the same 0.01 m wetting simulation. Closer means source distance ≤50 m and boundary distance ≤25 m. These are project review classes, not calibrated flood probabilities.",
+      "legend": [
+        {
+          "color": "#36867b",
+          "label": "Closer + event support"
+        },
+        {
+          "color": "#a3bf89",
+          "label": "Closer; no event support"
+        },
+        {
+          "color": "#cfac65",
+          "label": "Farther + event support"
+        },
+        {
+          "color": "#ba7469",
+          "label": "Farther; no event support"
+        }
+      ]
+    },
+    {
+      "id": "sourceDistance",
+      "label": "Distance from source cell",
+      "units": "m",
+      "description": "Distance to the nearest eligible current source supporting the eight-source spatial blend, before the spatial Gaussian. This is not a distance to every contributor or a weighted-effective source. Native heads are unchanged.",
+      "legend": [
+        {
+          "color": "#447f94",
+          "label": "≤25 m"
+        },
+        {
+          "color": "#82aaad",
+          "label": "25–50 m"
+        },
+        {
+          "color": "#d7bd78",
+          "label": "50–100 m"
+        },
+        {
+          "color": "#b77b67",
+          "label": ">100 m"
+        }
+      ]
+    },
+    {
+      "id": "boundaryDistance",
+      "label": "Distance beyond model boundary",
+      "units": "m",
+      "description": "Euclidean pixel-centre distance to the closest currently finite native wet footprint in the displayed extent. It uses every finite native element, including components excluded from the offshore-connected donor pool. This is a 1 m raster distance, not channel length or the exact vector shoreline.",
+      "legend": [
+        {
+          "color": "#447f94",
+          "label": "≤10 m"
+        },
+        {
+          "color": "#82aaad",
+          "label": "10–25 m"
+        },
+        {
+          "color": "#d7bd78",
+          "label": "25–50 m"
+        },
+        {
+          "color": "#b77b67",
+          "label": ">50 m"
+        }
+      ]
+    },
+    {
+      "id": "laterSupport",
+      "label": "Flooded elsewhere in this event",
+      "description": "For each currently added pixel, checks the same original element for finite output before and after the current timestep in the Wet0.01 run. All 649 saved outputs are considered, including outputs before the viewer crop. Later wet support corroborates spatial reach within this simulation; it does not confirm that flooding occurred here at the current time, and is not an observation.",
+      "legend": [
+        {
+          "color": "#3f8390",
+          "label": "Earlier and later"
+        },
+        {
+          "color": "#80ac9a",
+          "label": "Later only"
+        },
+        {
+          "color": "#c7ac76",
+          "label": "Earlier only"
+        },
+        {
+          "color": "#b87b70",
+          "label": "Never in native output"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "Bryant et al. (2024), resolution enhancement of flood inundation grids",
+      "url": "https://hess.copernicus.org/articles/28/575/2024/",
+      "supports": "Separating refinement inside native support from extension beyond it; distance-based projection, DEM exceedance and connected-component screening.",
+      "limitation": "The present nearest-centre/Gaussian mapper is not CostGrow. This paper does not calibrate the viewer diagnostic thresholds."
+    },
+    {
+      "label": "USACE HEC-RAS Mapper manual: Creating Results Maps",
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/rmum/6.6/mapping-results/creating-results-maps",
+      "supports": "Distinguishing computed model values from interpolated terrain maps, and mapping inundation through water-surface/terrain intersection.",
+      "limitation": "HEC-RAS documentation gives mapping context; the source model is MIKE 21, and HEC-RAS algorithms are not substituted."
+    },
+    {
+      "label": "DHI MIKE 21 FM scientific documentation (2026), section 3.3.5",
+      "url": "https://manuals.mikepoweredbydhi.help/2026/Coast_and_Sea/MIKE_21_Flow_FM_Scientific_Doc.pdf",
+      "supports": "Flooding and drying involve computational regimes; saved finite output is treated separately from internal model state.",
+      "limitation": "Finite eta is saved-output availability, not a reconstruction of all computationally active cells."
+    }
+  ],
+  "scope": "Diagnostic mapping support for actively connected terrain additions: source distance, distance beyond current native flooding, and earlier/later native wet support. A matched 0.10 m results file is unavailable for this domain; the wetting-scenario comparison is omitted, rather than borrowed from another domain. Grey water is unscored. These classes are not probabilities.",
+  "probabilityCalibrated": false,
+  "validationTransferredFromReference": false
+}

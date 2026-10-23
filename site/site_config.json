@@ -1,0 +1,39 @@
+{
+  "id": "van_buren_bay",
+  "name": "Van Buren Bay",
+  "crs": "EPSG:32617",
+  "sourceDomain": "Dunkirk",
+  "startSourceIndex": 456,
+  "endSourceIndex": 648,
+  "coordinateType": "rectangle",
+  "inputCoordinatesLatLon": [
+    [
+      42.453213,
+      -79.416634
+    ],
+    [
+      42.463249,
+      -79.388396
+    ]
+  ],
+  "priority": 2,
+  "meshBedOffsetM": 173.5,
+  "coreBounds": [
+    630073.1238244893,
+    4700761.468765764,
+    632623.1238244893,
+    4703021.468765764
+  ],
+  "panBounds": [
+    627573.1238244893,
+    4699761.468765764,
+    632623.1238244893,
+    4704021.468765764
+  ],
+  "sourceFile": "2D_IGLD85.dfsu",
+  "baselineAvailable": false,
+  "sourceSetupFile": "Dunkirk_Nov2020_Wet0.01.m21fm",
+  "viewportRole": "Display extent; a point-defined AOI does not define an extraction polygon.",
+  "unsupportedAreaHa": 10.0176,
+  "unsupportedDescription": "Lower terrain below 176.341 m outside the actual source mesh, in the full display/panning context. No flood assessment is made here. This threshold is the local full-event saved maximum water level plus 0.1 m; it is a screening margin, not a simulated level."
+}
